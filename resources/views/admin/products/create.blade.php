@@ -106,16 +106,17 @@
                                                     <label class="form-label" for="gallery_images">Gallery Images</label>
                                                     <div class="form-control-wrap">
                                                         <input type="file" id="gallery_images" name="gallery_images[]" multiple>
-                                                        @if(isset($product) && $product->gallery_images)
+                                                        @if(isset($product) && $product->galleryImages->isNotEmpty())
                                                             <div class="mt-2" style="display: flex; flex-wrap: nowrap; overflow-x: auto;">
-                                                                @foreach(json_decode($product->gallery_images) as $image)
-                                                                    <img src="{{ asset('storage/' . $image) }}" alt="Gallery Image" style="max-width: 200px; margin-right: 10px;">
+                                                                @foreach($product->galleryImages as $image)
+                                                                    <img src="{{ asset('storage/' . $image->image_url) }}" alt="Gallery Image" style="max-width: 200px; margin-right: 10px;">
                                                                 @endforeach
                                                             </div>
                                                         @endif
                                                     </div>
                                                 </div>
                                             </div>
+                                            
                                             
 
 
