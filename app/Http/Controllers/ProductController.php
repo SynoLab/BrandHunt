@@ -69,40 +69,45 @@ class ProductController extends Controller
     }
 
     public function update(Request $request, Product $product)
-{
-    $validatedData = $request->validate([
-        'name' => 'required|string',
-        'quantity' => 'required|integer',
-        'new_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        'gallery_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        'description' => 'nullable|string',
-        'price' => 'required|integer',
-        'short_description' => 'nullable|string',
-        'sku' => 'required|string',
-        'category_id' => 'required|exists:categories,id',
-    ]);
-
-    $productData = $request->only(['name', 'quantity', 'description', 'price', 'short_description', 'sku', 'category_id']);
-
-    if ($request->hasFile('new_image')) {
-        Storage::delete('public/' . $product->image);
-        $imagePath = $request->file('new_image')->store('product_images', 'public');
-        $productData['image'] = $imagePath;
-    }
-
-    // Update product details
-    $product->update($productData);
-
-    // Update or add new gallery images
-    if ($request->hasFile('gallery_images')) {
-        foreach ($request->file('gallery_images') as $galleryImage) {
-            $galleryImagePath = $galleryImage->store('product_gallery_images', 'public');
-            $product->galleryImages()->create(['image_url' => $galleryImagePath]);
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'quantity' => 'required|integer',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'gallery_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'description' => 'nullable|string',
+            'price' => 'required|integer',
+            'short_description' => 'nullable|string',
+            'sku' => 'required|string',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+    
+        $productData = $request->only(['name', 'quantity', 'description', 'price', 'short_description', 'sku', 'category_id']);
+    
+        // Handle image update
+        if ($request->hasFile('image')) {
+            // Delete the old image
+            Storage::delete('public/' . $product->image);
+    
+            // Store the new image
+            $imagePath = $request->file('image')->store('product_images', 'public');
+            $productData['image'] = $imagePath;
         }
+    
+        // Update product details
+        $product->update($productData);
+    
+        // Update or add new gallery images
+        if ($request->hasFile('gallery_images')) {
+            foreach ($request->file('gallery_images') as $galleryImage) {
+                $galleryImagePath = $galleryImage->store('product_gallery_images', 'public');
+                $product->galleryImages()->create(['image_url' => $galleryImagePath]);
+            }
+        }
+    
+        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
-
-    return redirect()->route('products.index')->with('success', 'Product updated successfully.');
-}
+    
     
     public function destroy(Product $product)
     {
