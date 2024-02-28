@@ -58,6 +58,14 @@
                         </a>
                     </li>
                     
+
+                    <li class="nk-menu-item has-sub">
+                        <a href="{{route('banks.index')}}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-tile-thumb"></em></span>
+                            <span class="nk-menu-text">Bank Details</span>
+                        </a>
+                    </li>
+                    
                     
                     <!-- .nk-menu-item -->
                 </ul><!-- .nk-menu -->

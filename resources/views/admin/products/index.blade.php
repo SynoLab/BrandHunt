@@ -58,9 +58,10 @@
                                             <td class="table-td">{{ $product->id }}</td>
                                             <td class="table-td">{{ $product->category_id }}</td>
                                             <td class="table-td"><img src="{{ asset('storage/' . $product->image) }}" alt="Product Image" style="max-width: 50px; max-height: 50px;"></td>
+                                            
                                             <td class="table-td">{{ $product->name }}</td>
                                             <td class="table-td">{{ $product->quantity }}</td>
-                                            <td class="table-td">{!! $product->description !!}</td>
+                                            <td class="table-td">{!! $product->product_description !!}</td>
                                             <td class="table-td">{{ $product->price }}</td>
                                             {{-- <td class="table-td">{!! $product->short_description !!}</td> --}}
                                             {{-- <td class="table-td">{{ $product->sku }}</td> --}}

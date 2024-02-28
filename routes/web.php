@@ -7,6 +7,9 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\BankDetailController;
+
 
 // Admin Routes
 // Auth::routes();
@@ -32,8 +35,22 @@ Route::get('/blogs/{id}', [SiteController::class, 'ShowBlog'])->name('site_blogs
 
 
 // Email Subscription 
-// Route::get('/contact', [SiteController::class, 'showContactForm'])->name('contact.show');
+Route::get('/contact_us', [SiteController::class, 'ContactUs'])->name('contact');
 Route::post('/contact_us', [SiteController::class, 'sendContactForm'])->name('contact.send');
+
+// Newsletter Signup In Product Inner page
+Route::post('/products/{id}', [SiteController::class, 'NewsletterSignup'])->name('newsletter.signup');
+
+// Route::get('products/{productId}', [ReviewController::class, 'index'])->name('reviews.index');
+Route::post('product_review/', [ReviewController::class, 'store'])->name('reviews.store');
+
+
+Route::get('/bank-details', [BankDetailController::class, 'index'])->name('banks.index');
+// Route::get('/bank-details/create', [BankDetailController::class, 'create'])->name('banks.create');
+Route::post('/bank-details', [BankDetailController::class, 'store'])->name('banks.store');
+Route::get('banks/{id}/edit', [BankDetailController::class, 'edit'])->name('banks.edit');
+Route::put('banks/{id}', [BankDetailController::class, 'update'])->name('banks.update');
+// Route::delete('banks/{id}', [BankDetailController::class, 'destroy'])->name('banks.destroy');
 
 
 

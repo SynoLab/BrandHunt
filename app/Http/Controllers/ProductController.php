@@ -25,19 +25,31 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+
         $validatedData = $request->validate([
             'name' => 'required|string',
             'quantity' => 'required|integer',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'gallery_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'description' => 'nullable|string',
+
+            'product_description' => 'nullable|string',
             'price' => 'required|integer',
             'short_description'=> 'nullable|string',
             'sku' => 'required|string',
-            'category_id' => 'required|exists:categories,id', 
+            'category_id' => 'required|exists:categories,id',
+            'color' => 'nullable|string',
+            'manufacturer' => 'nullable|string',
+            'product_condition' => 'nullable|in:new,used,used like new',
+            'height' => 'nullable|numeric',
+            'weight' => 'nullable|numeric',
+            'product_type' => 'required|in:0,1',
+
         ]);
     
-        $productData = $request->only(['name', 'quantity', 'description', 'price', 'short_description', 'sku', 'category_id']);
+        $productData = $request->only([
+            'name', 'quantity', 'product_description', 'price', 'short_description', 'sku', 'category_id',
+            'color', 'manufacturer', 'product_condition', 'height', 'weight','product_type'
+        ]);
     
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('product_images', 'public');
@@ -53,9 +65,9 @@ class ProductController extends Controller
                 $product->galleryImages()->create(['image_url' => $galleryImagePath]);
             }
         }
-    
         return redirect()->route('products.index')->with('success', 'Product added successfully.');
     }
+    
     
     public function show(Product $product)
     {
@@ -75,30 +87,34 @@ class ProductController extends Controller
             'quantity' => 'required|integer',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'gallery_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'description' => 'nullable|string',
+            'product_description' => 'nullable|string',
             'price' => 'required|integer',
             'short_description' => 'nullable|string',
             'sku' => 'required|string',
             'category_id' => 'required|exists:categories,id',
+            'color' => 'nullable|string',
+            'manufacturer' => 'nullable|string',
+            'product_type' => 'required|in:0,1',
+            'condition' => 'nullable|string',
+            'height' => 'nullable|numeric',
+            'weight' => 'nullable|numeric',
         ]);
     
-        $productData = $request->only(['name', 'quantity', 'description', 'price', 'short_description', 'sku', 'category_id']);
+        $productData = $request->only([
+            'name', 'quantity', 'product_description', 'price', 'short_description', 'sku', 'category_id',
+            'color', 'manufacturer', 'product_type', 'condition', 'height', 'weight'
+        ]);
     
-        // Handle image update
         if ($request->hasFile('image')) {
-            // Delete the old image
-            Storage::delete('public/' . $product->image);
-    
-            // Store the new image
             $imagePath = $request->file('image')->store('product_images', 'public');
             $productData['image'] = $imagePath;
         }
     
-        // Update product details
         $product->update($productData);
     
-        // Update or add new gallery images
+        // Update gallery images
         if ($request->hasFile('gallery_images')) {
+            $product->galleryImages()->delete(); // Delete existing gallery images
             foreach ($request->file('gallery_images') as $galleryImage) {
                 $galleryImagePath = $galleryImage->store('product_gallery_images', 'public');
                 $product->galleryImages()->create(['image_url' => $galleryImagePath]);
@@ -107,6 +123,7 @@ class ProductController extends Controller
     
         return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
+    
     
     
     public function destroy(Product $product)

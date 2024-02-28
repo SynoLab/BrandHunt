@@ -91,6 +91,88 @@
                                                     </div>
                                                 </div>
                                             </div>
+        <!-- Add new fields for color, manufacturer, product_type, product_condition, height, weight -->
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label class="form-label" for="color">Color</label>
+                <div class="form-control-wrap">
+                    <input type="text" class="form-control" id="color" name="color"
+                        value="{{ isset($product) ? $product['color'] : old('color') }}">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label class="form-label" for="manufacturer">Manufacturer</label>
+                <div class="form-control-wrap">
+                    <input type="text" class="form-control" id="manufacturer" name="manufacturer"
+                        value="{{ isset($product) ? $product['manufacturer'] : old('manufacturer') }}">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label class="form-label" for="product_condition">Condition</label>
+                <div class="form-control-wrap">
+                    <select class="form-control" id="product_condition" name="product_condition">
+                        <option value="new" {{ isset($product) && $product['product_condition'] == 'new' ? 'selected' : '' }}>New</option>
+                        <option value="used" {{ isset($product) && $product['product_condition'] == 'used' ? 'selected' : '' }}>Used</option>
+                        <option value="used like new" {{ isset($product) && $product['product_condition'] == 'used like new' ? 'selected' : '' }}>Used like new</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label class="form-label" for="height">Height (cm)</label>
+                <div class="form-control-wrap">
+                    <input type="number" step="any" class="form-control" id="height" name="height"
+                           value="{{ isset($product) ? $product['height'] : old('height') }}">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label class="form-label" for="weight">Weight (g)</label>
+                <div class="form-control-wrap">
+                    <input type="number" step="any" class="form-control" id="weight" name="weight"
+                           value="{{ isset($product) ? $product['weight'] : old('weight') }}">
+                </div>
+            </div>
+        </div>
+        
+
+        {{-- <div class="col-lg-4">
+            <div class="form-group">
+                <label class="form-label" for="product_type">Product Type</label>
+                <div class="form-control-wrap">
+                    <select class="form-control" id="product_type" name="product_type">
+                        <option value="0" {{ isset($product) && $product['product_type'] == 0 ? 'selected' : '' }}>Normal Product</option>
+                        <option value="1" {{ isset($product) && $product['product_type'] == 1 ? 'selected' : '' }}>Featured</option>
+                    </select>
+                </div>
+            </div>
+        </div> --}}
+
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label class="form-label">Is Featured?</label>
+                <div class="form-control-wrap">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="is_featured" name="product_type" value="1" {{ isset($product) && $product['product_type'] == 1 ? 'checked' : '' }}>
+                        <label class="form-check-label" for="is_featured">Yes</label>
+                    </div>
+                    {{-- <input type="hidden" name="product_type" value="0"> <!-- Hidden input for 'No' --> --}}
+                </div>
+            </div>
+        </div>
+        
+        
+        
+
+        <!-- End of new fields -->
+
                                             <div class="col-lg-4">
                                                 <div class="form-group">
                                                     <label class="form-label" for="name">Product Qty</label>
@@ -122,7 +204,7 @@
 
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="price">Price</label>
+                                                    <label class="form-label" for="price">Price (in LKR)</label>
                                                     <div class="form-control-wrap">
                                                         <input type="text" class="form-control" id="price" name="price" value="{{ isset($product) ? $product['price'] : old('price') }}">
                                                     </div>
@@ -151,7 +233,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="name">Product Description</label>
                                                     <div class="form-control-wrap">
-                                                        <textarea class="form-control" id="product_description" name="description">{{isset($product) ? $product['description']:old('description')}}</textarea>
+                                                        <textarea class="form-control" id="product_description" name="product_description">{{isset($product) ? $product['description']:old('description')}}</textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -185,7 +267,7 @@
     </div>
     <script>
         // CKEDITOR.replace('short_description');
-        CKEDITOR.replace('product_description');
+        // CKEDITOR.replace('product_description');
 
         $(document).ready(function () {
             $('#addProductBtn').on('click', function (event) {

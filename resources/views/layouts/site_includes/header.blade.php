@@ -22,8 +22,8 @@
                     <ul id="siteNav" class="site-nav medium center hidearrow">
                         <li class="lvl1 parent megamenu"><a href="{{route('site.welcome')}}">Home <i class="anm anm-angle-down-l"></i></a></li>
                         <li class="lvl1 parent megamenu"><a href="{{route('shop')}}">Shop <i class="anm anm-angle-down-l"></i></a></li>
-                        <li><a href="about-us.html" class="site-nav">About Us </a></li>
-                        <li><a href="contact-us.html" class="site-nav">Contact Us</a></li>
+                        <li><a href="{{route('contact')}}" class="site-nav">Contact Us</a></li>
+
                         <li class="lvl1 parent megamenu"><a href="{{route('blogs')}}">Blogs <i class="anm anm-angle-down-l"></i></a></li>
 
                     </ul>

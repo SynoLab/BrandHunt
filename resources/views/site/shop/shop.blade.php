@@ -30,7 +30,7 @@
                     </div>
                     <!--Categories-->
                     <!--Price Filter-->
-                    <div class="sidebar_widget filterBox filter-widget">
+                    {{-- <div class="sidebar_widget filterBox filter-widget">
                         <div class="widget-title">
                             <h2>Price</h2>
                         </div>
@@ -49,10 +49,10 @@
                                 </div>
                             </div>
                         </form>
-                    </div>
+                    </div> --}}
                     <!--End Price Filter-->
                     <!--Size Swatches-->
-                    <div class="sidebar_widget filterBox filter-widget size-swacthes">
+                    {{-- <div class="sidebar_widget filterBox filter-widget size-swacthes">
                         <div class="widget-title"><h2>Size</h2></div>
                         <div class="filter-color swacth-list">
                             <ul>
@@ -67,10 +67,10 @@
                                 <li><span class="swacth-btn">XS</span></span></li>
                             </ul>
                         </div>
-                    </div>
+                    </div> --}}
                     <!--End Size Swatches-->
                     <!--Color Swatches-->
-                    <div class="sidebar_widget filterBox filter-widget">
+                    {{-- <div class="sidebar_widget filterBox filter-widget">
                         <div class="widget-title"><h2>Color</h2></div>
                         <div class="filter-color swacth-list clearfix">
                             <span class="swacth-btn black"></span>
@@ -90,7 +90,7 @@
                             <span class="swacth-btn dimGrey"></span>
                             <span class="swacth-btn khaki"></span> 
                         </div>
-                    </div>
+                    </div> --}}
                     <!--End Color Swatches-->
                     <!--Brand-->
                     <div class="sidebar_widget filterBox filter-widget">
@@ -377,7 +377,7 @@
                                 Belle Multipurpose Bootstrap 4 Html Template that will give you and your customers a smooth shopping experience which can be used for various kinds of stores such as fashion,...
                             </div>
                             
-                        <form method="post" action="http://annimexweb.com/cart/add" id="product_form_10508262282" accept-charset="UTF-8" class="product-form product-form-product-template hidedropdown" enctype="multipart/form-data">
+                        <form method="post" action="" id="product_form_10508262282" accept-charset="UTF-8" class="product-form product-form-product-template hidedropdown" enctype="multipart/form-data">
                             <div class="swatch clearfix swatch-0 option1" data-option-index="0">
                                 <div class="product-form__item">
                                   <label class="header">Color: <span class="slVariant">Red</span></label>

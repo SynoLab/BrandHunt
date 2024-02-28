@@ -11,18 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->integer('quantity');
-            $table->string('image')->nullable();
-            $table->text('description')->nullable();
-            $table->text('short_description')->nullable();
-            $table->string('sku');
-            $table->string('size');
-            $table->float('price')->nullable();
-
-            $table->timestamps();
+        Schema::table('products', function (Blueprint $table) {
             $table->string('color')->nullable();
             $table->string('manufacturer')->nullable();
             $table->string('product_type')->nullable();
@@ -37,6 +26,13 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropColumn('color');
+            $table->dropColumn('manufacturer');
+            $table->dropColumn('product_type');
+            $table->dropColumn('condition');
+            $table->dropColumn('height');
+            $table->dropColumn('weight');
+        });
     }
 };

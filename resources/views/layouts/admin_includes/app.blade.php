@@ -15,7 +15,9 @@
     <link rel="stylesheet" href="{{asset('admin/assets/css/dashlite.css?ver=3.1.3')}}">
     <link id="skin-default" rel="stylesheet" href="{{asset('admin/assets/css/theme.css?ver=3.1.3')}}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.ckeditor.com/4.16.1/standard/ckeditor.js"></script>
+    {{-- <script src="https://cdn.ckeditor.com/4.16.1/standard/ckeditor.js"></script> --}}
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 </head>

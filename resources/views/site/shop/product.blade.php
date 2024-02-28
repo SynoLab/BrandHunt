@@ -1,3 +1,14 @@
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+@if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
 @extends('layouts.site_includes.app')
 @section('content')
 <div id="page-content">
@@ -102,7 +113,7 @@
                         <div class="product-single__description rte">
                         <p>{!! $product->short_description !!}</p>
                         </div>
-                        <form method="post" action="http://annimexweb.com/cart/add" id="product_form_10508262282" accept-charset="UTF-8" class="product-form product-form-product-template hidedropdown" enctype="multipart/form-data">
+                        <form method="post" action="" id="product_form_10508262282" accept-charset="UTF-8" class="product-form product-form-product-template hidedropdown" enctype="multipart/form-data">
             {{-- Color Removed  --}}
                             <div class="swatch clearfix swatch-1 option2" data-option-index="1">
                                 <div class="product-form__item">
@@ -133,11 +144,73 @@
                                         </div>
                                     </div>
                                 </div>                                
-                                <div class="product-form__item--submit">
-                                    <button type="button" name="add" class="btn product-form__cart-submit">
-                                        <span>Add to cart</span>
-                                    </button>
+<!-- Modal window for newsletter sign-up -->
+<div id="newsletter-modal" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content2">
+            <span class="close">&times;</span>
+            <div id="page-content" class="shopify-section">
+                <div class="password-table">
+                    <div class="password-cell"></div>
+                    <div class="password-page password-cell text-center">
+                        <div class="password-main text-center" role="main">
+                            <div class="password-main__inner">
+                                <!-- main content -->
+                                <a href="index.html" class="site-header__logo-image">
+                                    <img src="assets/images/logo.svg" alt="" />
+                                </a>
+                                <h2 class="password__title"><b>Stay Tuned For Exciting News and Launches!</b></h2>
+                              
+                              
+
+                                <form method="post" action="{{ route('newsletter.signup', ['id' => $product->id]) }}">
+                                    @csrf
+                                    <p class="password__form-heading h4">Follow us for update now!</p>
+                                    <div class="input-group password__input-group">
+                                        <input type="email" name="email" id="Email" class="input-group__field" placeholder="Email address">
+                                        <span class="input-group__btn">
+                                            <button type="submit" name="submit" class="btn"><span>Notify me</span></button>
+                                        </span>
+                                    </div>
+                                </form>
+                                
+                                
+                                
+                                <div class="password-social-sharing">
+                                    <div class="social-sharing">
+                                        <ul class="list--inline site-footer__social-icons social-icons">
+                                            <li><a class="social-icons__link" href="#" target="_blank" title="Belle Multipurpose Bootstrap 4 Template on Facebook"><i class="icon icon-facebook"></i></a></li>
+                                            <li><a class="social-icons__link" href="#" target="_blank" title="Belle Multipurpose Bootstrap 4 Template on Twitter"><i class="icon icon-twitter"></i> <span class="icon__fallback-text">Twitter</span></a></li>
+                                            <li><a class="social-icons__link" href="#" target="_blank" title="Belle Multipurpose Bootstrap 4 Template on Pinterest"><i class="icon icon-pinterest"></i> <span class="icon__fallback-text">Pinterest</span></a></li>
+                                            <li><a class="social-icons__link" href="#" target="_blank" title="Belle Multipurpose Bootstrap 4 Template on Instagram"><i class="icon icon-instagram"></i> <span class="icon__fallback-text">Instagram</span></a></li>
+                                            <li><a class="social-icons__link" href="#" target="_blank" title="Belle Multipurpose Bootstrap 4 Template on Tumblr"><i class="icon icon-tumblr-alt"></i> <span class="icon__fallback-text">Tumblr</span></a></li>
+                                            <li><a class="social-icons__link" href="#" target="_blank" title="Belle Multipurpose Bootstrap 4 Template on YouTube"><i class="icon icon-youtube"></i> <span class="icon__fallback-text">YouTube</span></a></li>
+                                            <li><a class="social-icons__link" href="#" target="_blank" title="Belle Multipurpose Bootstrap 4 Template on Vimeo"><i class="icon icon-vimeo-alt"></i> <span class="icon__fallback-text">Vimeo</span></a></li>
+                                        </ul>
+                                    </div>
                                 </div>
+                                <!-- content end-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add to cart button -->
+
+<div class="product-form__item--submit">
+    <button type="button" name="add" class="btn product-form__cart-submit" id="add-to-cart" data-toggle="modal" data-target="#newsletter-modal">
+        <span>Add to cart</span>
+    </button>
+</div>
+
+
+
+
+
                             </div>
                             <!-- End Product Action -->
                         </form>
@@ -183,51 +256,81 @@
                                     <div id="shopify-product-reviews">
                                         <div class="spr-container">
                                             <div class="spr-header clearfix">
-                                                <div class="spr-summary">
-                                                    <span class="product-review"><a class="reviewLink"><i class="font-13 fa fa-star"></i><i class="font-13 fa fa-star"></i><i class="font-13 fa fa-star"></i><i class="font-13 fa fa-star-o"></i><i class="font-13 fa fa-star-o"></i> </a><span class="spr-summary-actions-togglereviews">Based on 6 reviews456</span></span>
-                                                    <span class="spr-summary-actions">
-                                                        <a href="#" class="spr-summary-actions-newreview btn">Write a review</a>
-                                                    </span>
+                                                <div class="reviews">
+                                                    @foreach ($reviews as $review)
+                                                        <div class="review">
+                                                            <span class="rating">
+                                                                @for ($i = 1; $i <= 5; $i++)
+                                                                    @if ($i <= $review->rating)
+                                                                        <i class="font-13 fa fa-star"></i>
+                                                                    @else
+                                                                        <i class="font-13 fa fa-star-o"></i>
+                                                                    @endif
+                                                                @endfor
+                                                            </span>
+                                                            <span class="author">{{ $review->author }}</span>
+                                                            <span class="date">{{ $review->created_at->format('M d, Y') }}</span>
+                                                            <h5>{{ $review->title }}</h5>
+                                                            <p>{{ $review->body }}</p>
+                                                        </div>
+                                                    @endforeach
                                                 </div>
+                                                
                                             </div>
                                             <div class="spr-content">
                                                 <div class="spr-form clearfix">
-                                                    <form method="post" action="#" id="new-review-form" class="new-review-form">
+
+                                                    
+                                                    <form method="post" action="{{ route('reviews.store') }}" id="new-review-form" class="new-review-form">
+                                                        @csrf
+                                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+
                                                         <h3 class="spr-form-title">Write a review</h3>
                                                         <fieldset class="spr-form-contact">
                                                             <div class="spr-form-contact-name">
-                                                              <label class="spr-form-label" for="review_author_10508262282">Name</label>
-                                                              <input class="spr-form-input spr-form-input-text " id="review_author_10508262282" type="text" name="review[author]" value="" placeholder="Enter your name">
+                                                                <label class="spr-form-label" for="review_author_{{ $product->id }}">Name</label>
+                                                                <input class="spr-form-input spr-form-input-text" id="review_author_{{ $product->id }}" type="text" name="author" value="" placeholder="Enter your name">
                                                             </div>
                                                             <div class="spr-form-contact-email">
-                                                              <label class="spr-form-label" for="review_email_10508262282">Email</label>
-                                                              <input class="spr-form-input spr-form-input-email " id="review_email_10508262282" type="email" name="review[email]" value="" placeholder="john.smith@example.com">
+                                                                <label class="spr-form-label" for="review_email_{{ $product->id }}">Email</label>
+                                                                <input class="spr-form-input spr-form-input-email" id="review_email_{{ $product->id }}" type="email" name="email" value="" placeholder="john.smith@example.com">
                                                             </div>
                                                         </fieldset>
                                                         <fieldset class="spr-form-review">
-                                                          <div class="spr-form-review-rating">
-                                                            <label class="spr-form-label">Rating</label>
-                                                            <div class="spr-form-input spr-starrating">
-                                                              <div class="product-review"><a class="reviewLink" href="#"><i class="fa fa-star-o"></i><i class="font-13 fa fa-star-o"></i><i class="font-13 fa fa-star-o"></i><i class="font-13 fa fa-star-o"></i><i class="font-13 fa fa-star-o"></i></a></div>
+                                                            <div class="spr-form-review-rating">
+                                                                <label class="spr-form-label">Rating</label>
+                                                                <div class="spr-form-input spr-starrating">
+                                                                    <div class="product-review" id="star-rating">
+                                                                        <a class="reviewLink" href="#" data-rating="1"><i class="fa fa-star"></i></a>
+                                                                        <a class="reviewLink" href="#" data-rating="2"><i class="fa fa-star"></i></a>
+                                                                        <a class="reviewLink" href="#" data-rating="3"><i class="fa fa-star"></i></a>
+                                                                        <a class="reviewLink" href="#" data-rating="4"><i class="fa fa-star"></i></a>
+                                                                        <a class="reviewLink" href="#" data-rating="5"><i class="fa fa-star"></i></a>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                          </div>
-                                                    
-                                                          <div class="spr-form-review-title">
-                                                            <label class="spr-form-label" for="review_title_10508262282">Review Title</label>
-                                                            <input class="spr-form-input spr-form-input-text " id="review_title_10508262282" type="text" name="review[title]" value="" placeholder="Give your review a title">
-                                                          </div>
-                                                    
-                                                          <div class="spr-form-review-body">
-                                                            <label class="spr-form-label" for="review_body_10508262282">Body of Review <span class="spr-form-review-body-charactersremaining">(1500)</span></label>
-                                                            <div class="spr-form-input">
-                                                              <textarea class="spr-form-input spr-form-input-textarea " id="review_body_10508262282" data-product-id="10508262282" name="review[body]" rows="10" placeholder="Write your comments here"></textarea>
+                                                            <input type="hidden" name="rating" id="review_rating_{{ $product->id }}" value="1">
+                                                            <div class="spr-form-review-title">
+                                                                <label class="spr-form-label" for="review_title_{{ $product->id }}">Review Title</label>
+                                                                <input class="spr-form-input spr-form-input-text" id="review_title_{{ $product->id }}" type="text" name="title" value="" placeholder="Give your review a title">
                                                             </div>
-                                                          </div>
+                                                            <div class="spr-form-review-body">
+                                                                <label class="spr-form-label" for="review_body_{{ $product->id }}">Body of Review <span class="spr-form-review-body-charactersremaining">(1500)</span></label>
+                                                                <div class="spr-form-input">
+                                                                    <textarea class="spr-form-input spr-form-input-textarea" id="review_body_{{ $product->id }}" name="body" rows="10" placeholder="Write your comments here"></textarea>
+                                                                </div>
+                                                            </div>
                                                         </fieldset>
                                                         <fieldset class="spr-form-actions">
                                                             <input type="submit" class="spr-button spr-button-primary button button-primary btn btn-primary" value="Submit Review">
                                                         </fieldset>
                                                     </form>
+                                                    
+                                                    
+
+                                                    
+                                                    
+
                                                 </div>
                                                 <div class="spr-reviews">
                                                     <div class="spr-review">
@@ -369,415 +472,86 @@
                         <p class="sub-heading">You can stop autoplay, increase/decrease aniamtion speed and number of grid to show and products from store admin.</p>
                     </header>
                     <div class="productPageSlider">
-                        <div class="col-12 item">
-                            <!-- start product image -->
-                            <div class="product-image">
-                                <!-- start product image -->
-                                <a href="#">
-                                    <!-- image -->
-                                    <img class="primary blur-up lazyload" data-src="{{ asset('site/assets/images/product-images/product-image1.jpg') }}" src="{{ asset('site/assets/images/product-images/product-image1.jpg') }}" alt="image" title="product">
-                                    <!-- End image -->
-                                    <!-- Hover image -->
-                                    <img class="hover blur-up lazyload" data-src="{{ asset('site/assets/images/product-images/product-image1-1.jpg') }}" src="{{ asset('site/assets/images/product-images/product-image1-1.jpg') }}" alt="image" title="product">
-                                    <!-- End hover image -->
-                                    <!-- product label -->
-                                    <div class="product-labels rectangular"><span class="lbl on-sale">-16%</span> <span class="lbl pr-label1">new</span></div>
-                                    <!-- End product label -->
-                                </a>
-                                <!-- end product image -->
-
-                                <!-- Start product button -->
-                                <form class="variants add" action="#" onclick="window.location.href='cart.html'"method="post">
-                                    <button class="btn btn-addto-cart" type="button" tabindex="0">Select Options</button>
-                                </form>
-                                <div class="button-set">
-                                    <a href="#" title="Quick View" class="quick-view" tabindex="0">
-                                        <i class="icon anm anm-search-plus-r"></i>
-                                    </a>
-                                    <div class="wishlist-btn">
-                                        <a class="wishlist add-to-wishlist" href="wishlist.html">
-                                            <i class="icon anm anm-heart-l"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <!-- end product button -->
-                            </div>
-                            <!-- end product image -->
-                            <!--start product details -->
-                            <div class="product-details text-center">
-                                <!-- product name -->
-                                <div class="product-name">
-                                    <a href="#">Edna Dress</a>
-                                </div>
-                                <!-- End product name -->
-                                <!-- product price -->
-                                <div class="product-price">
-                                    <span class="old-price">$500.00</span>
-                                    <span class="price">$600.00</span>
-                                </div>
-                                <!-- End product price -->
-                                
-                                <div class="product-review">
-                                    <i class="font-13 fa fa-star"></i>
-                                    <i class="font-13 fa fa-star"></i>
-                                    <i class="font-13 fa fa-star"></i>
-                                    <i class="font-13 fa fa-star-o"></i>
-                                    <i class="font-13 fa fa-star-o"></i>
-                                </div>
-
-                            </div>
-                            <!-- End product details -->
-                        </div>
-                        <div class="col-12 item">
-                            <!-- start product image -->
-                            <div class="product-image">
-                                <!-- start product image -->
-                                <a href="#">
-                                    <!-- image -->
-                                    <img class="primary blur-up lazyload" data-src="{{ asset('site/assets/images/product-images/product-image2.jpg') }}" src="{{ asset('site/assets/images/product-images/product-image2.jpg') }}" alt="image" title="product">
-                                    <!-- End image -->
-                                    <!-- Hover image -->
-                                    <img class="hover blur-up lazyload" data-src="{{ asset('site/assets/images/product-images/product-image2-1.jpg') }}" src="{{ asset('site/assets/images/product-images/product-image2-1.jpg') }}" alt="image" title="product">
-                                    <!-- End hover image -->
-                                </a>
-                                <!-- end product image -->
-
-                                <!-- Start product button -->
-                                <form class="variants add" action="#" onclick="window.location.href='cart.html'"method="post">
-                                    <button class="btn btn-addto-cart" type="button" tabindex="0">Select Options</button>
-                                </form>
-                                <div class="button-set">
-                                    <a href="#" title="Quick View" class="quick-view" tabindex="0">
-                                        <i class="icon anm anm-search-plus-r"></i>
-                                    </a>
-                                    <div class="wishlist-btn">
-                                        <a class="wishlist add-to-wishlist" href="wishlist.html">
-                                            <i class="icon anm anm-heart-l"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <!-- end product button -->
-                            </div>
-                            <!-- end product image -->
-
-                            <!--start product details -->
-                            <div class="product-details text-center">
-                                <!-- product name -->
-                                <div class="product-name">
-                                    <a href="#">Elastic Waist Dress</a>
-                                </div>
-                                <!-- End product name -->
-                                <!-- product price -->
-                                <div class="product-price">
-                                    <span class="price">$748.00</span>
-                                </div>
-                                <!-- End product price -->
-                                <div class="product-review">
-                                    <i class="font-13 fa fa-star"></i>
-                                    <i class="font-13 fa fa-star"></i>
-                                    <i class="font-13 fa fa-star"></i>
-                                    <i class="font-13 fa fa-star"></i>
-                                    <i class="font-13 fa fa-star"></i>
-                                </div>
-
-                            </div>
-                            <!-- End product details -->
-                        </div>
-                        <div class="col-12 item">
-                            <!-- start product image -->
-                            <div class="product-image">
-                                <!-- start product image -->
-                                <a href="#">
-                                    <!-- image -->
-                                    <img class="primary blur-up lazyload" data-src="{{ asset('site/assets/images/product-images/product-image3.jpg') }}" src="{{ asset('site/assets/images/product-images/product-image3.jpg') }}" alt="image" title="product">
-                                    <!-- End image -->
-                                    <!-- Hover image -->
-                                    <img class="hover blur-up lazyload" data-src="{{ asset('site/assets/images/product-images/product-image3-1.jpg') }}" src="{{ asset('site/assets/images/product-images/product-image3-1.jpg') }}" alt="image" title="product">
-                                    <!-- End hover image -->
-                                    <!-- product label -->
-                                    <div class="product-labels rectangular"><span class="lbl pr-label2">Hot</span></div>
-                                    <!-- End product label -->
-                                </a>
-                                <!-- end product image -->
-
-                                <!-- Start product button -->
-                                <form class="variants add" action="#" onclick="window.location.href='cart.html'"method="post">
-                                    <button class="btn btn-addto-cart" type="button" tabindex="0">Select Options</button>
-                                </form>
-                                <div class="button-set">
-                                    <a href="#" title="Quick View" class="quick-view" tabindex="0">
-                                        <i class="icon anm anm-search-plus-r"></i>
-                                    </a>
-                                    <div class="wishlist-btn">
-                                        <a class="wishlist add-to-wishlist" href="wishlist.html">
-                                            <i class="icon anm anm-heart-l"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <!-- end product button -->
-                            </div>
-                            <!-- end product image -->
-
-                            <!--start product details -->
-                            <div class="product-details text-center">
-                                <!-- product name -->
-                                <div class="product-name">
-                                    <a href="#">3/4 Sleeve Kimono Dress</a>
-                                </div>
-                                <!-- End product name -->
-                                <!-- product price -->
-                                <div class="product-price">
-                                    <span class="price">$550.00</span>
-                                </div>
-                                <!-- End product price -->
-                                
-                                <div class="product-review">
-                                    <i class="font-13 fa fa-star"></i>
-                                    <i class="font-13 fa fa-star"></i>
-                                    <i class="font-13 fa fa-star"></i>
-                                    <i class="font-13 fa fa-star"></i>
-                                    <i class="font-13 fa fa-star-o"></i>
-                                </div>
-
-                            </div>
-                            <!-- End product details -->
-                        </div>
-                        
-                        <div class="col-12 item">
-                                            <!-- start product image -->
-                                            <div class="product-image">
-                                                <!-- start product image -->
-                                                <a href="#">
-                                                    <!-- image -->
-                                                    <img class="primary blur-up lazyload" data-src="{{ asset('site/assets/images/product-images/product-image6.jpg') }}" src="{{ asset('site/assets/images/product-images/product-image6.jpg') }}" alt="image" title="product">
-                                                    <!-- End image -->
-                                                    <!-- Hover image -->
-                                                    <img class="hover blur-up lazyload" data-src="{{ asset('site/assets/images/product-images/product-image6-1.jpg') }}" src="{{ asset('site/assets/images/product-images/product-image6-1.jpg') }}" alt="image" title="product">
-                                                    <!-- End hover image -->
-                                                    <!-- product label -->
-                                                    <div class="product-labels rectangular"><span class="lbl on-sale">-16%</span> <span class="lbl pr-label1">new</span></div>
-                                                    <!-- End product label -->
-                                                </a>
-                                                <!-- end product image -->
-
-                                                <!-- Start product button -->
-                                                <form class="variants add" action="#" onclick="window.location.href='cart.html'"method="post">
-                                                    <button class="btn btn-addto-cart" type="button" tabindex="0">Select Options</button>
-                                                </form>
-                                                <div class="button-set">
-                                                    <a href="#" title="Quick View" class="quick-view" tabindex="0">
-                                                        <i class="icon anm anm-search-plus-r"></i>
-                                                    </a>
-                                                    <div class="wishlist-btn">
-                                                        <a class="wishlist add-to-wishlist" href="wishlist.html">
-                                                            <i class="icon anm anm-heart-l"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <!-- end product button -->
-                                            </div>
-                                            <!-- end product image -->
-
-                                            <!--start product details -->
-                                            <div class="product-details text-center">
-                                                <!-- product name -->
-                                                <div class="product-name">
-                                                    <a href="#">Zipper Jacket</a>
-                                                </div>
-                                                <!-- End product name -->
-                                                <!-- product price -->
-                                                <div class="product-price">
-                                                    <span class="price">$788.00</span>
-                                                </div>
-                                                <!-- End product price -->
-                                                
-                                                <div class="product-review">
-                                                    <i class="font-13 fa fa-star"></i>
-                                                    <i class="font-13 fa fa-star"></i>
-                                                    <i class="font-13 fa fa-star"></i>
-                                                    <i class="font-13 fa fa-star-o"></i>
-                                                    <i class="font-13 fa fa-star-o"></i>
-                                                </div>
-                                            </div>
-                                            <!-- End product details -->
-                                        </div>
-                        <div class="col-12 item">
-                                            <!-- start product image -->
-                                            <div class="product-image">
-                                                <!-- start product image -->
-                                                <a href="#">
-                                                    <!-- image -->
-                                                    <img class="primary blur-up lazyload" data-src="{{ asset('site/assets/images/product-images/product-image7.jpg') }}" src="{{ asset('site/assets/images/product-images/product-image7.jpg') }}" alt="image" title="product">
-                                                    <!-- End image -->
-                                                    <!-- Hover image -->
-                                                    <img class="hover blur-up lazyload" data-src="{{ asset('site/assets/images/product-images/product-image7-1.jpg') }}" src="{{ asset('site/assets/images/product-images/product-image7-1.jpg') }}" alt="image" title="product">
-                                                    <!-- End hover image -->
-                                                </a>
-                                                <!-- end product image -->
-
-                                                <!-- Start product button -->
-                                                <form class="variants add" action="#" onclick="window.location.href='cart.html'"method="post">
-                                                    <button class="btn btn-addto-cart" type="button" tabindex="0">Select Options</button>
-                                                </form>
-                                                <div class="button-set">
-                                                    <a href="#" title="Quick View" class="quick-view" tabindex="0">
-                                                        <i class="icon anm anm-search-plus-r"></i>
-                                                    </a>
-                                                    <div class="wishlist-btn">
-                                                        <a class="wishlist add-to-wishlist" href="wishlist.html">
-                                                            <i class="icon anm anm-heart-l"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <!-- end product button -->
-                                            </div>
-                                            <!-- end product image -->
-
-                                            <!--start product details -->
-                                            <div class="product-details text-center">
-                                                <!-- product name -->
-                                                <div class="product-name">
-                                                    <a href="#">Zipper Jacket</a>
-                                                </div>
-                                                <!-- End product name -->
-                                                <!-- product price -->
-                                                <div class="product-price">
-                                                    <span class="price">$748.00</span>
-                                                </div>
-                                                <!-- End product price -->
-                                                <div class="product-review">
-                                                    <i class="font-13 fa fa-star"></i>
-                                                    <i class="font-13 fa fa-star"></i>
-                                                    <i class="font-13 fa fa-star"></i>
-                                                    <i class="font-13 fa fa-star"></i>
-                                                    <i class="font-13 fa fa-star"></i>
-                                                </div>
-                                            </div>
-                                            <!-- End product details -->
-                                        </div>
-                    </div>
-                    </div>
-                <!--End Related Product Slider-->
-            
-                    <!--Recently Product Slider-->
-                    <div class="related-product grid-products">
-                        <header class="section-header">
-                            <h2 class="section-header__title text-center h2"><span>Recently Viewed Product</span></h2>
-                            <p class="sub-heading">You can manage this section from store admin as describe in above section</p>
-                        </header>
-                        <div class="productPageSlider">
+                        @foreach($products as $product)
                             <div class="col-12 item">
                                 <!-- start product image -->
                                 <div class="product-image">
                                     <!-- start product image -->
-                                    <a href="#">
+                                    <a href="{{ route('product.show', $product->id) }}">
                                         <!-- image -->
-                                        <img class="primary blur-up lazyload" data-src="{{ asset('site/assets/images/product-images/product-image6.jpg') }}" src="{{ asset('site/assets/images/product-images/product-image6.jpg') }}" alt="image" title="product">
+                                        <img class="primary blur-up lazyload" data-src="{{ asset('storage/' . $product->image) }}" src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" title="{{ $product->name }}">
                                         <!-- End image -->
                                         <!-- Hover image -->
-                                        <img class="hover blur-up lazyload" data-src="{{ asset('site/assets/images/product-images/product-image6-1.jpg') }}" src="{{ asset('site/assets/images/product-images/product-image6-1.jpg') }}" alt="image" title="product">
+                                        <img class="hover blur-up lazyload" data-src="{{ asset('storage/' . $product->image) }}" src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" title="{{ $product->name }}">
                                         <!-- End hover image -->
                                         <!-- product label -->
-                                        <div class="product-labels rectangular"><span class="lbl on-sale">-16%</span> <span class="lbl pr-label1">new</span></div>
+                                        <div class="product-labels rectangular">
+                                            @if($product->discount > 0)
+                                                <span class="lbl on-sale">-{{ $product->discount }}%</span>
+                                            @endif
+                                            @if($product->is_new)
+                                                <span class="lbl pr-label1">new</span>
+                                            @endif
+                                        </div>
                                         <!-- End product label -->
                                     </a>
                                     <!-- end product image -->
+                    
+                                    <!-- Start product button -->
+                                    <form class="variants add" action="" method="post">
+                                        @csrf
+                                        <button class="btn btn-addto-cart" type="submit" tabindex="0">Select Options</button>
+                                    </form>
+                                    <div class="button-set">
+                                        <a href="#" title="Quick View" class="quick-view" tabindex="0">
+                                            <i class="icon anm anm-search-plus-r"></i>
+                                        </a>
+                                        <div class="wishlist-btn">
+                                            <a class="wishlist add-to-wishlist" href="">
+                                                <i class="icon anm anm-heart-l"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <!-- end product button -->
                                 </div>
                                 <!-- end product image -->
-
                                 <!--start product details -->
                                 <div class="product-details text-center">
                                     <!-- product name -->
                                     <div class="product-name">
-                                        <a href="#">Zipper Jacket</a>
+                                        <a href="{{ route('product.show', $product->id) }}">{{ $product->name }}</a>
                                     </div>
                                     <!-- End product name -->
+                                    <!-- product price -->
+                                    <div class="product-price">
+                                        @if($product->discount > 0)
+                                            <span class="old-price">${{ $product->price }}</span>
+                                            <span class="price">${{ $product->price - ($product->price * $product->discount / 100) }}</span>
+                                        @else
+                                            <span class="price">${{ $product->price }}</span>
+                                        @endif
+                                    </div>
+                                    <!-- End product price -->
+                                    
+                                    <div class="product-review">
+                                        @for ($i = 0; $i < $product->rating; $i++)
+                                            <i class="font-13 fa fa-star"></i>
+                                        @endfor
+                                        @for ($i = $product->rating; $i < 5; $i++)
+                                            <i class="font-13 fa fa-star-o"></i>
+                                        @endfor
+                                    </div>
+                    
                                 </div>
                                 <!-- End product details -->
                             </div>
-                            <div class="col-12 item">
-                                <!-- start product image -->
-                                <div class="product-image">
-                                    <!-- start product image -->
-                                    <a href="#">
-                                        <!-- image -->
-                                        <img class="primary blur-up lazyload" data-src="{{ asset('site/assets/images/product-images/product-image7.jpg') }}" src="{{ asset('site/assets/images/product-images/product-image7.jpg') }}" alt="image" title="product">
-                                        <!-- End image -->
-                                        <!-- Hover image -->
-                                        <img class="hover blur-up lazyload" data-src="{{ asset('site/assets/images/product-images/product-image7-1.jpg') }}" src="{{ asset('site/assets/images/product-images/product-image7-1.jpg') }}" alt="image" title="product">
-                                        <!-- End hover image -->
-                                    </a>
-                                    <!-- end product image -->
-                                </div>
-                                <!-- end product image -->
-
-                                <!--start product details -->
-                                <div class="product-details text-center">
-                                    <!-- product name -->
-                                    <div class="product-name">
-                                        <a href="#">Zipper Jacket</a>
-                                    </div>
-                                    <!-- End product name -->
-                                </div>
-                                <!-- End product details -->
-                            </div>
-                            <div class="col-12 item">
-                                <!-- start product image -->
-                                <div class="product-image">
-                                    <!-- start product image -->
-                                    <a href="#">
-                                        <!-- image -->
-                                        <img class="primary blur-up lazyload" data-src="{{ asset('site/assets/images/product-images/product-image8.jpg') }}" src="{{ asset('site/assets/images/product-images/product-image8.jpg') }}" alt="image" title="product">
-                                        <!-- End image -->
-                                        <!-- Hover image -->
-                                        <img class="hover blur-up lazyload" data-src="{{ asset('site/assets/images/product-images/product-image8-1.jpg') }}" src="{{ asset('site/assets/images/product-images/product-image8-1.jpg') }}" alt="image" title="product">
-                                        <!-- End hover image -->
-                                    </a>
-                                    <!-- end product image -->
-                                </div>
-
-                                <!-- end product image -->
-
-                                <!--start product details -->
-                                <div class="product-details text-center">
-                                    <!-- product name -->
-                                    <div class="product-name">
-                                        <a href="#">Workers Shirt Jacket</a>
-                                    </div>
-                                    <!-- End product name -->
-                                </div>
-                                <!-- End product details -->
-                            </div>
-                            <div class="col-12 item">
-                                <!-- start product image -->
-                                <div class="product-image">
-                                    <!-- start product image -->
-                                    <a href="#">
-                                        <!-- image -->
-                                        <img class="primary blur-up lazyload" data-src="{{ asset('site/assets/images/product-images/product-image9.jpg') }}" src="{{ asset('site/assets/images/product-images/product-image9.jpg') }}" alt="image" title="product">
-                                        <!-- End image -->
-                                        <!-- Hover image -->
-                                        <img class="hover blur-up lazyload" data-src="{{ asset('site/assets/images/product-images/product-image9-1.jpg') }}" src="{{ asset('site/assets/images/product-images/product-image9-1.jpg') }}" alt="image" title="product">
-                                        <!-- End hover image -->
-                                    </a>
-                                    <!-- end product image -->
-                                </div>
-                                <!-- end product image -->
-
-                                <!--start product details -->
-                                <div class="product-details text-center">
-                                    <!-- product name -->
-                                    <div class="product-name">
-                                        <a href="#">Watercolor Sport Jacket in Brown/Blue</a>
-                                    </div>
-                                    <!-- End product name -->
-                                </div>
-                                <!-- End product details -->
-                            </div>
-
-                        </div>
+                        @endforeach
                     </div>
-                <!--End Recently Product Slider-->
+                    
+                    </div>
+                <!--End Related Product Slider-->
+            
+
 
             
             </div>
